@@ -3,12 +3,15 @@
 namespace App\Controller;
 
 use App\Core\Request;
+use App\Core\View;
 
 class HomeController
 {
     public static function index(Request $request)
     {
-        echo "<h1>Homepage</h1>";
+        $name = "Adeleye Ayodeji";
+        $title = "Home";
+        return view('layout', compact('name', 'title'));
     }
 
     //about
