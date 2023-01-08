@@ -3,7 +3,6 @@
 namespace App\Controller;
 
 use App\Core\Request;
-use App\Core\View;
 
 class HomeController
 {
