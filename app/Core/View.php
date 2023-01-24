@@ -57,7 +57,7 @@ class View
     //include file
     public static function include($view, $args = [])
     {
-        echo self::returnRender($view, $args);
+        return self::returnRender($view, $args);
     }
 
     //section
@@ -100,6 +100,6 @@ class View
             $yield = $view;
         }
         //show yield
-        echo $yield;
+        return $yield;
     }
 }
