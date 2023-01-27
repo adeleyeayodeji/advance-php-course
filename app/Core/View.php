@@ -2,6 +2,8 @@
 
 namespace App\Core;
 
+use App\Core\Session;
+
 class View
 {
     //render
@@ -101,5 +103,40 @@ class View
         }
         //show yield
         return $yield;
+    }
+
+    //pushScript
+    public static function pushScript($name)
+    {
+        //save buffer name
+        $GLOBALS['scriptName'] = $name;
+        ob_start();
+    }
+
+    //endPushScript
+    public static function endPushScript()
+    {
+        //get buffer content
+        $content = ob_get_clean();
+        //save session
+        $session = new Session();
+        $session->set($GLOBALS['scriptName'], $content);
+        //unset script name
+        unset($GLOBALS['scriptName']);
+    }
+
+    //yield
+    public static function yield($section)
+    {
+        //check if section exists in session
+        $session = new Session();
+        if ($session->has($section)) {
+            //get section
+            $section = $session->get($section);
+            //unset section
+            $session->unset($section);
+            //show section
+            echo $section;
+        }
     }
 }

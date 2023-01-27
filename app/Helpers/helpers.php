@@ -69,3 +69,45 @@ if (!function_exists('endsection')) {
         return \App\Core\View::endsection();
     }
 }
+
+//ade_yield
+if (!function_exists('ade_yield')) {
+    //ade_yield
+    /*
+    * @param string $view
+    * @param array $args
+    * @return html
+    */
+    function ade_yield($view)
+    {
+        return \App\Core\View::yield($view);
+    }
+}
+
+//pushScript
+if (!function_exists('pushScript')) {
+    //pushScript
+    /*
+    * @param string $view
+    * @param array $args
+    * @return html
+    */
+    function pushScript($view)
+    {
+        return \App\Core\View::pushScript($view);
+    }
+}
+
+//endPushScript
+if (!function_exists('endPushScript')) {
+    //endPushScript
+    /*
+    * @param string $view
+    * @param array $args
+    * @return html
+    */
+    function endPushScript()
+    {
+        return \App\Core\View::endPushScript();
+    }
+}

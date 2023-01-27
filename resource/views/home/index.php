@@ -1,4 +1,13 @@
 <?php
+pushScript('styles');
+?>
+<style>
+    h1 {
+        color: red;
+    }
+</style>
+<?php
+endPushScript();
 section('content');
 ?>
 <h1>Hello World</h1>
@@ -11,4 +20,11 @@ section('content');
 </p>
 <?php
 endsection();
+pushScript('scripts');
+?>
+<script>
+    console.log('Hello World');
+</script>
+<?php
+endPushScript();
 extend('layout/app', 'content');

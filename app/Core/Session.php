@@ -26,6 +26,20 @@ class Session
         return isset($_SESSION[$key]) ? $_SESSION[$key] : null;
     }
 
+    //has
+    public function has($key)
+    {
+        return isset($_SESSION[$key]);
+    }
+
+    //unset
+    public function unset($key)
+    {
+        if (isset($_SESSION[$key])) {
+            unset($_SESSION[$key]);
+        }
+    }
+
     //delete session
     public function delete($key)
     {
