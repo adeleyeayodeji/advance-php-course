@@ -2,12 +2,15 @@
 
 namespace App\Core;
 
-class Route
+use App\Core\Request;
+use App\Core\MiddleWare;
+
+class Route extends MiddleWare
 {
     public static $routes = [];
 
     //route handler
-    public static function routeHandler($uri, $controlargs, $method)
+    public static function routeHandler($uri, $controlargs, $method, $middleware = null)
     {
         //convert uri to preg
         if (preg_match_all('/\{[a-zA-Z0-9-_@]+\}/', $uri, $matches)) {
@@ -27,12 +30,13 @@ class Route
             'preg' => $uri2,
             'matches' => $matches,
             'controlargs' => $controlargs,
-            'method' => $method
+            'method' => $method,
+            'middleware' => $middleware
         ];
     }
 
     //validate URL
-    public static function validateURL($uri, $controlargs)
+    public static function validateURL($uri, $controlargs, $middleware)
     {
         //check if uri has parameters
         if (preg_match_all('/\{[a-zA-Z0-9-_@]+\}/', $uri, $matches)) {
@@ -53,6 +57,8 @@ class Route
             }
             //check if uri matches preg pattern
             if (preg_match($uri2, Request::uri(), $matches)) {
+                //processMiddleware
+                self::processMiddleware($middleware);
                 //check if $controlargs is callable
                 if (is_callable($controlargs)) {
                     //remove first match
@@ -94,6 +100,8 @@ class Route
         } else {
             //check if uri matches preg pattern
             if ($uri == Request::uri()) {
+                //processMiddleware
+                self::processMiddleware($middleware);
                 //check if $controlargs is callable
                 if (is_callable($controlargs)) {
                     //call method
@@ -128,9 +136,49 @@ class Route
     }
 
     //get
-    public static function get($uri, $controlargs)
+    public static function get($uri, $controlargs, &$middleware = null)
     {
-        self::routeHandler($uri, $controlargs, 'GET');
+        self::routeHandler($uri, $controlargs, 'GET', $middleware);
+    }
+
+    //redirect
+    public static function redirect($simpleurl)
+    {
+        //get base url
+        $baseurl = Request::baseurl();
+        //final url
+        $url = $baseurl . $simpleurl;
+        //redirect
+        header("Location: $url");
+        exit;
+    }
+
+    //middleware
+    public function middleware($middleware, $function)
+    {
+        //process middleware
+        $function($middleware);
+    }
+
+    //processMiddleware
+    public static function processMiddleware($middleware)
+    {
+        //check if middleware is not null
+        if (!is_null($middleware)) {
+            $response = self::action($middleware);
+            //check if code is not 200
+            if ($response['code'] != 200) {
+                //check if redirect is set
+                if (isset($response['redirect'])) {
+                    //redirect
+                    redirect($response['redirect']);
+                } else {
+                    //show error
+                    throw new \Exception($response['error'], $response['code']);
+                    exit;
+                }
+            }
+        }
     }
 
     //post
@@ -207,7 +255,7 @@ class Route
                     //check if method matches
                     if ($route["method"] == $method || $route["method"] == 'ANY') {
                         //do uri validation
-                        self::validateURL($route["uri"], $route["controlargs"]);
+                        self::validateURL($route["uri"], $route["controlargs"], $route["middleware"]);
                     } else {
                         self::notFoundHeader();
                     }
@@ -224,7 +272,7 @@ class Route
                     //check if method matches
                     if ($route["method"] == $method || $route["method"] == 'ANY') {
                         //do validation
-                        self::validateURL($route["uri"], $route["controlargs"]);
+                        self::validateURL($route["uri"], $route["controlargs"], $route["middleware"]);
                     } else {
                         self::notFoundHeader();
                     }

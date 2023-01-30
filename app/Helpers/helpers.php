@@ -111,3 +111,17 @@ if (!function_exists('endPushScript')) {
         return \App\Core\View::endPushScript();
     }
 }
+
+//redirect
+//check if function exists
+if (!function_exists('redirect')) {
+    //redirect
+    /*
+    * @param string $url
+    * @return void
+    */
+    function redirect($url)
+    {
+        return \App\Core\Route::redirect($url);
+    }
+}

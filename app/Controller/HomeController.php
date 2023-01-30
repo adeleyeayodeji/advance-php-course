@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Core\Request;
+use App\Core\Session;
 
 class HomeController
 {
@@ -15,13 +16,29 @@ class HomeController
             "Deborah",
             "Tunde"
         ];
+        //set session user
+        // $session = new Session;
+        // $session->set('user', 'John Doe');
+        //destroy session
+        // $session->destroy();
         return view('home/index', compact('name', 'age', 'array'));
+    }
+
+    //dashboard
+    public static function dashboard(Request $request)
+    {
+        echo "dashboard";
     }
 
     //about
     public static function about(Request $request)
     {
         echo "about";
+    }
+
+    public static function login(Request $request)
+    {
+        echo "login";
     }
 
     //contact
