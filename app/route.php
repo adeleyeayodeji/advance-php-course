@@ -13,7 +13,7 @@ $route::get('/blog/{id}/{title}/{slug}/{amount}', [HomeController::class, 'blog'
 $route->middleware('user', function ($middleware) use ($route) {
     $route::get('/dashboard', [HomeController::class, 'dashboard'], $middleware);
 });
-
+//static
 $route::get('/about', [HomeController::class, 'about']);
 $route::get('/login', [HomeController::class, 'login']);
 $route::get('/contact-us', [HomeController::class, 'contact']);
