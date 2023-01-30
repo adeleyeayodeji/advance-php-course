@@ -11,7 +11,7 @@ class MiddleWare
         if (method_exists(self::class, $action)) {
             return self::$action();
         } else {
-            return ['error' => 'Action not found', 'code' => 404];
+            return ['error' => 'Middleware {' . $action . '} action not found', 'code' => 404];
         }
     }
 
