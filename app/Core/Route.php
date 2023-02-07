@@ -136,7 +136,7 @@ class Route extends MiddleWare
     }
 
     //get
-    public static function get($uri, $controlargs, &$middleware = null)
+    public static function get($uri, $controlargs, $middleware = null)
     {
         self::routeHandler($uri, $controlargs, 'GET', $middleware);
     }
